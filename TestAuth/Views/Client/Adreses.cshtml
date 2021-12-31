@@ -1,0 +1,23 @@
+﻿ <title>Address Selection</title>
+    <link rel="stylesheet" href="~/css/adreses.css" />
+    <script src="~/js/adreses.js"></script>
+    <form action="Create">
+        <div class="card-container">
+            <div class="panel">
+                <div>
+                    <img class="sb-title-icon" src="https://fonts.gstatic.com/s/i/googlematerialicons/location_pin/v5/24px.svg" alt="">
+                    <span class="sb-title">First Address Selection</span>
+                </div>
+                <input type="text" placeholder="Address" id="location" />
+                <input type="text" placeholder="City" id="locality" />
+                <input type="text" placeholder="State/Province" id="administrative_area_level_1" />
+                <input type="text" placeholder="Country" id="country" />
+                <div style="display: flex; justify-content: flex-start;">
+                    <br /><input type="submit" value="Выбрать адрес" onclick="sendadres();" class="btn-success" />
+                </div>
+            </div>
+            <div class="map" id="map1"></div>
+        </div>
+        
+    </form>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1Kd9KbDuDzj5uJEKb48sggnN2rCEpX38&libraries=places&callback=initMap&solution_channel=GMP_QB_addressselection_v1_cABC" async defer></script>
