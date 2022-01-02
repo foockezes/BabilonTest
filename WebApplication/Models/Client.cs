@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication.Models;
 
 namespace WebApplication
 {
@@ -16,11 +15,8 @@ namespace WebApplication
         public string Name { get; set; }
         public string LastName { get; set; }
         public bool Identification { get; set; }
-        [Required]
-        public int AccountCode { get; set; }
+        public decimal Balance { get; set; } = 0;
 
-        
-        public virtual ICollection<Wallet> Wallets { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

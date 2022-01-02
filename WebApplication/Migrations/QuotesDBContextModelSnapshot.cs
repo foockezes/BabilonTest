@@ -22,10 +22,7 @@ namespace WebApplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AccountCode")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("ClientId")
+                    b.Property<decimal>("Balance")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Identification")
@@ -40,72 +37,60 @@ namespace WebApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.ToTable("Clients");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e3d05112-fae7-4e44-8e49-3824f80fdeb0"),
-                            AccountCode = 2551,
+                            Id = new Guid("9327f9ff-b974-47d4-8260-7b8923160c74"),
+                            Balance = 0m,
                             Identification = true,
                             LastName = "Boluevna",
                             Name = "Olucha"
                         },
                         new
                         {
-                            Id = new Guid("1b2369f3-626f-43bb-b1e8-2aee11ac47d5"),
-                            AccountCode = 2883,
+                            Id = new Guid("c986f286-0a2a-41f2-bdba-b88b8fa3f055"),
+                            Balance = 0m,
                             Identification = true,
                             LastName = "holova",
                             Name = "Anora"
                         });
                 });
 
-            modelBuilder.Entity("WebApplication.Wallet", b =>
+            modelBuilder.Entity("WebApplication.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Balance")
+                    b.Property<Guid>("ClientId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ClienId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ClientId")
+                    b.Property<decimal>("Sum")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Wallet");
+                    b.ToTable("transactions");
                 });
 
-            modelBuilder.Entity("WebApplication.Client", b =>
-                {
-                    b.HasOne("WebApplication.Client", null)
-                        .WithMany("Clients")
-                        .HasForeignKey("ClientId");
-                });
-
-            modelBuilder.Entity("WebApplication.Wallet", b =>
+            modelBuilder.Entity("WebApplication.Transaction", b =>
                 {
                     b.HasOne("WebApplication.Client", "Client")
-                        .WithMany("Wallets")
-                        .HasForeignKey("ClientId");
+                        .WithMany("Transactions")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Client");
                 });
 
             modelBuilder.Entity("WebApplication.Client", b =>
                 {
-                    b.Navigation("Clients");
-
-                    b.Navigation("Wallets");
+                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

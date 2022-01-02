@@ -23,7 +23,7 @@ namespace WebApplication
                     Name = "Olucha",
                     LastName = "Boluevna",
                     Identification = true,
-                    AccountCode = 2551,
+                    Balance = 0,
                 },
                 new Client
                 {
@@ -31,7 +31,7 @@ namespace WebApplication
                     Name = "Anora",
                     LastName = "holova",
                     Identification = true,
-                    AccountCode = 2883,
+                    Balance = 0,
                 }
                 );
         }
@@ -41,7 +41,8 @@ namespace WebApplication
             optionsBuilder.UseSqlite("Data source=quotedb.db");
         }
 
-        public DbSet<Client> Clients { get; set; }
+        public DbSet<Client> clients { get; set; }
+        public DbSet<Transaction> transactions  { get; set; }
 
         public QuotesDBContext()
         {

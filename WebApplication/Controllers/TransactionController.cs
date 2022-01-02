@@ -10,50 +10,52 @@ namespace WebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class TransactionController : ControllerBase
     {
+        public static decimal MonOperation { get; set; }
         [HttpGet]
-        public async Task<List<Client>> Get()
+        public async Task<List<Transaction>> Get()
         {
             using var appContext = new QuotesDBContext();
-            var list = await appContext.clients.ToListAsync();
+            var list = await appContext.transactions.ToListAsync();
             return await Task.FromResult(list);
         }
         [HttpGet("{Id}")]
-        public Client Get(Guid Id)
+        public Transaction Get(Guid Id)
         {
             using (QuotesDBContext dbContext = new QuotesDBContext())
             {
-                return dbContext.clients.FirstOrDefault(e => e.Id == Id);
+                return dbContext.transactions.FirstOrDefault(e => e.ClientId == Id);
             }
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Client client)
+        public async Task<IActionResult> Create(Transaction transaction)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
             using var appContext = new QuotesDBContext();
-            await appContext.clients.AddAsync(client);
+            await appContext.transactions.AddAsync(transaction);
             await appContext.SaveChangesAsync();
+            transaction.Sum = MonOperation;
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] Client client)
+        public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] Transaction transaction)
         {
             using var appContext = new QuotesDBContext();
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            var exist = await appContext.clients.FindAsync(id);
+            var exist = await appContext.transactions.FindAsync(id);
             if (exist == null)
             {
                 return NotFound();
             }
-            exist.Balance = TransactionController.MonOperation;
+            exist.Sum = transaction.Sum;
             var result = await appContext.SaveChangesAsync();
             return Ok();
         }
@@ -62,7 +64,7 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             using var appContext = new QuotesDBContext();
-            var exist = await appContext.clients.FindAsync(id);
+            var exist = await appContext.transactions.FindAsync(id);
             if (exist == null)
             {
                 return BadRequest();

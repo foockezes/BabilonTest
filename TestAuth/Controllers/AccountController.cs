@@ -15,7 +15,7 @@ using System.Text;
 
 namespace TestAuth.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : Microsoft.AspNetCore.Mvc.Controller
     {
         Uri baseAddress = new Uri("http://localhost:21758/api");
         HttpClient client;
@@ -69,7 +69,7 @@ namespace TestAuth.Controllers
                     string _ss = _now.Second.ToString();
 
                     string _uniqueId = _dd + _hh + _mm + _min + _ss;
-                    user = new User { Email = model.Email, Password = model.Password, Usercode = Int32.Parse(_uniqueId)};
+                    user = new User { Email = model.Email, Password = model.Password};
                     Role userRole = await db.Roles.FirstOrDefaultAsync(r => r.Name == "user");
                     if (userRole != null)
                         user.Role = userRole;
@@ -112,7 +112,7 @@ namespace TestAuth.Controllers
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name),
-                new Claim(ClaimTypes.NameIdentifier, user.Usercode.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
             ClaimsIdentity id = new(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));

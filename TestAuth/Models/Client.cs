@@ -13,6 +13,6 @@ namespace TestAuth.Models
         public string Name { get; set; }
         public string LastName { get; set; }
         public bool Identification { get; set; }
-        public int AccountCode { get; set; }
+        public decimal Balance { get; set; }
     }
 }

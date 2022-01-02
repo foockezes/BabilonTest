@@ -15,50 +15,49 @@ using Microsoft.AspNetCore.Authorization;
 namespace TestAuth.Controllers
 {
     [Authorize]
-    public class ClientController : Microsoft.AspNetCore.Mvc.Controller
+    public class TransactionController : Microsoft.AspNetCore.Mvc.Controller
     {
         Uri baseAddress = new Uri("http://localhost:21758/api");
-        HttpClient client;
-        public ClientController()
+        HttpClient wallet;
+        public TransactionController()
         {
-            client = new HttpClient();
-            client.BaseAddress = baseAddress;
+            wallet = new HttpClient();
+            wallet.BaseAddress = baseAddress;
         }
         public ActionResult Index()
         {
-            List<Client> modelList = new List<Client>();
-            HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/Client").Result;
+            List<Transaction> modelList = new List<Transaction>();
+            HttpResponseMessage response = wallet.GetAsync(wallet.BaseAddress + "/Transaction").Result;
             if (response.IsSuccessStatusCode)
             {
                 string data = response.Content.ReadAsStringAsync().Result;
-                modelList = JsonConvert.DeserializeObject<List<Client>>(data);
+                modelList = JsonConvert.DeserializeObject<List<Transaction>>(data);
             }
             return View(modelList);
         }
         public ActionResult GetById()
         {
-            var id = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Client modelList = new Client();
-            HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/Client/" + id).Result;
+            Transaction modelList = new Transaction();
+            HttpResponseMessage response = wallet.GetAsync(wallet.BaseAddress + "/Transaction/" + User.FindFirstValue(ClaimTypes.NameIdentifier)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                modelList = JsonConvert.DeserializeObject<Client>(data);
+                modelList = JsonConvert.DeserializeObject<Transaction>(data);
             }
             return View(modelList);
         }
 
             // POST: User
-        public ActionResult Create()
-        {
-        return View();
-        }
+            public ActionResult Create()
+            {
+                return View();
+            }
         [HttpPost]
-        public ActionResult Create(Client model)
+        public ActionResult Create(Transaction transaction)
         {
-            string data = JsonConvert.SerializeObject(model);
+            string data = JsonConvert.SerializeObject(transaction);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = client.PostAsync(client.BaseAddress + "/Client", content).Result;
+            HttpResponseMessage response = wallet.PostAsync(wallet.BaseAddress + "/Transaction", content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
@@ -67,7 +66,7 @@ namespace TestAuth.Controllers
         }
         public ActionResult Delete(Guid id)
         {
-            HttpResponseMessage response = client.DeleteAsync(client.BaseAddress + "/Client/" + id).Result;
+            HttpResponseMessage response = wallet.DeleteAsync(wallet.BaseAddress + "/Transaction/" + id).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
