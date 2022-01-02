@@ -53,7 +53,14 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
-            exist.Balance = TransactionController.MonOperation;
+            if((exist.Balance += client.Balance) < 0)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                exist.Balance += client.Balance;
+            }
             var result = await appContext.SaveChangesAsync();
             return Ok();
         }
